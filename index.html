@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width", initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form>
+        <input type="text" id="input" />
+        <button id="get">GET</button>
+        <button id="post">POST</button>
+    </form>
+    <script>
+        const getBtn = document.getElementById('get')
+        const postBtn = document.getElementById('post')
+        const input = document.getElementById('input')
+
+	const baseUrl = 'http://example.com/api/info';    
+
+        getBtn.addEventListener('click', getInfo)
+        async function getInfo(e) {
+            e.preventDefault()
+            const res = await fetch(baseUrl,
+            {
+                method: 'GET'
+            })
+            console.log(res)
+            const data = await res.json()
+            input.value = data.info
+        }
+        async function postInfo() {
+
+        }
+    </script>
+</body>
+
+</html>
