@@ -1,0 +1,64 @@
+name: App Frontend workflow
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  Image-build-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build and tag of docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7} .
+
+      - name: Test newly created build image
+        run: docker run --rm -d -p 3000:3000 --name front-cnt ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
+
+      - name: Push image to DockerHub
+        if  : success()
+        run : |
+          docker login -u ${{ secrets.DOCKER_UNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+          docker push ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
+
+  Change-image-tag-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Git setup
+        run : |
+          git config --global user.name 'Tereza'
+          git config --global user.email 'an3146073@gmil.com'
+
+      - name: SSH setup
+        uses: MrSquaare/ssh-setup-action@v1
+        with:
+          host: github.com
+          private-key: ${{ secrets.PRIVATE_KEY }}
+
+      - name: Clone target repository
+        run : git clone git@github.com:tereza-arta/app-deployment.git
+
+      - name: Set Short Git SHA
+        run : echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      - name: Update manifest with yq
+        working-directory: app-deployment
+        run: |
+          yq '.spec.template.spec.containers.[0].image = "terezabisharyan/app-client:${{env.SHORT_SHA}}"' -i k8s-manifests/client/deploy.yml
+
+      - name: Commit and push changes
+        working-directory: app-deployment
+        env:
+          GITHUB_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+        run: |
+          git add k8s-manifests/client/deploy.yml
+          git commit -m "Update frontend image in k8s deployment"
+          git push origin main
