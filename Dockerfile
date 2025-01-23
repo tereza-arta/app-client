@@ -10,6 +10,6 @@ USER 0
 
 WORKDIR /front
 
-RUN unlink /etc/nginx/sites-enabled/default
+#RUN unlink /etc/nginx/sites-enabled/default
 
 COPY ./nginx-setup/* .
