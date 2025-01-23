@@ -1,15 +1,9 @@
-#FROM nginx:alpine
-#
-#WORKDIR /front
-#
-#COPY index.html ./
-
 FROM nginx:alpine
 
 USER 0
 
-WORKDIR /front
+COPY index.html /usr/share/nginx/html
 
-#RUN unlink /etc/nginx/sites-enabled/default
+EXPOSE 80
 
-COPY ./nginx-setup/* .
+CMD ["nginx", "-g", "daemon off;"]
