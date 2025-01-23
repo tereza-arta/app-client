@@ -1,0 +1,52 @@
+name: Frontend workflow
+
+on:
+  push:
+    branches: ["main"]
+
+env:
+  REPO_NAME: ${{ github.event.repository.name }}
+
+jobs:
+  Image-build-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build and tag of docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7} .
+
+      - name: Test newly created build image
+        run: docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
+
+      - name: Push image to DockerHub
+        if  : success()
+        run : |
+          docker login -u ${{ secrets.DOCKER_UNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+          docker push ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
+
+  Change-image-tag-and-deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Execute docker command
+        id: test
+        run: docker ps -a --filter "name=front-cnt"
+
+      - name: Create docker container
+        #if: ${{ !steps.test.outputs.stdout || contains(steps.test.outputs.stdout, 'front-cnt') }}
+        run: |
+          if [ ! docker ps -a --format '{{.Names}}' | grep -q 'front-cnt' ]; then
+            docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
+          else
+            echo "Container with name 'front-cnt' already exists!"
+            docker stop front-cnt
+            docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
+          fi 
+        
