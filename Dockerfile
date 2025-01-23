@@ -1,5 +1,5 @@
 FROM nginx:alpine
 
-WORKDIR /app
+WORKDIR /front
 
-COPY ./index.html ./
+COPY index.html ./
