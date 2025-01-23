@@ -42,7 +42,7 @@ jobs:
       - name: Create docker container
         #if: ${{ !steps.test.outputs.stdout || contains(steps.test.outputs.stdout, 'front-cnt') }}
         run: |
-          if [ ! docker ps -a --format '{{.Names}}' | grep -q 'front-cnt' ]; then
+          if ! docker ps -a --format '{{.Names}}' | grep -q 'front-cnt'; then
             docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
           else
             echo "Container with name 'front-cnt' already exists!"
