@@ -29,12 +29,10 @@ jobs:
           docker push ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
 
   Change-image-tag-and-deploy:
+    needs: Image-build-push
     runs-on: self-hosted
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       - name: Execute docker command
         id: test
         run: docker ps -a --filter "name=front-cnt"
