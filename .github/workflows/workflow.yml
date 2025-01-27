@@ -43,10 +43,4 @@ jobs:
             docker stop front-cnt
             docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
           fi
-
-  Docker-exec:
-    needs: Change-image-tag-and-deploy
-    runs-on: front-cnt
-    steps:    
-      - name: Generate certificate
-        run: docker exec -it front-cnt /bin/sh -c 'printf "an3146073@gmail.com\nY\nY\n2\n" | certbot --nginx'    
+          docker exec -it front-cnt /bin/sh -c 'certbot --nginx --non-interactive --agree-tos --email an3146073@gmail.com -d yourdomain.com'
