@@ -36,14 +36,12 @@ jobs:
     steps:
       - name: Create docker container
         run: |
-          if ! docker ps -a --format '{{.Names}}' | grep -q 'front-cnt'; then
-            docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
-          else
+          if docker ps -a --format '{{.Names}}' | grep -q 'front-cnt'; then
             echo "Container with name 'front-cnt' already exists!"
             docker stop front-cnt || true
             docker rm front-cnt || true
-            docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
-          fi
+          fi  
+          docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
           docker exec front-cnt /bin/sh -c printf 'an3146073@gmail.com\nY\nY\n2\n' | certbot --nginx
           #docker exec front-cnt /bin/sh -c 'certbot --nginx --non-interactive --agree-tos --email an3146073@gmail.com -d yourdomain.com'
           docker stop front-cnt-0
