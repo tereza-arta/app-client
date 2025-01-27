@@ -21,16 +21,8 @@ jobs:
           docker build -t ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7} .    
 
       - name: Test newly created build image
-        run: |
-          if ! docker ps -a --format '{{.Names}}' | grep -q 'front-cnt'; then
-            docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
-          else
-            echo "Container with name 'front-cnt' already exists!"
-            docker stop front-cnt || true
-            docker rm front-cnt || true
-            docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
-          fi
-
+        run: docker run --rm -d --name front-cnt-0 -p 8084:80 ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
+        
       - name: Push image to DockerHub
         if  : success()
         run : |
@@ -53,3 +45,4 @@ jobs:
             docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
           fi
           docker exec front-cnt /bin/sh -c 'certbot --nginx --non-interactive --agree-tos --email an3146073@gmail.com -d yourdomain.com'
+          docker stop front-cnt-0
