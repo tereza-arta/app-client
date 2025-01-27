@@ -44,5 +44,6 @@ jobs:
             docker rm front-cnt || true
             docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
           fi
-          docker exec front-cnt /bin/sh -c 'certbot --nginx --non-interactive --agree-tos --email an3146073@gmail.com -d yourdomain.com'
+          docker exec front-cnt /bin/sh -c printf 'an3146073@gmail.com\nY\nY\n2\n' | certbot --nginx
+          #docker exec front-cnt /bin/sh -c 'certbot --nginx --non-interactive --agree-tos --email an3146073@gmail.com -d yourdomain.com'
           docker stop front-cnt-0
