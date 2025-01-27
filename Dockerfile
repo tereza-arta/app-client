@@ -13,10 +13,6 @@ RUN openssl req -x509 -newkey rsa:2048 -days 30 -nodes -passout pass:$PASS \
     -keyout /etc/nginx/certs/ssl.key -out /etc/nginx/certs/ssl.crt \
     -subj "/C=AM/ST=Shirak/L=City/O=Organization/OU=Unit/CN=example.com"
 
-RUN openssl req -x509 -newkey rsa:2048 -days 30 -nodes -passout pass:$PASS_2 \
-    -keyout /etc/nginx/certs/api_ssl.key -out /etc/nginx/certs/api_ssl.crt \
-    -subj "/C=AM/ST=Shirak/L=City/O=Organization/OU=Unit/CN=example.com"
-
 COPY index.html /usr/share/nginx/html/
 
 COPY custom-nginx/test.conf /etc/nginx/conf.d/

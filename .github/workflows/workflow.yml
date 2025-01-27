@@ -4,9 +4,6 @@ on:
   push:
     branches: ["main"]
 
-env:
-  REPO_NAME: ${{ github.event.repository.name }}
-
 jobs:
   Image-build-push:
     runs-on: ubuntu-latest
@@ -17,7 +14,7 @@ jobs:
 
       - name: Build and tag of docker image
         run: |
-          docker build --build-arg PASS={{secrets.CERT_PASS}} --build-arg PASS_2={{secrets.CERT_PASS_2}} -t ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7} .
+          docker build --build-arg PASS={{secrets.CERT_PASS}} -t ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7} .
 
       - name: Test newly created build image
         run: docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
@@ -33,10 +30,6 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Execute docker command
-        id: test
-        run: docker ps -a --filter "name=front-cnt"
-
       - name: Create docker container
         run: |
           if ! docker ps -a --format '{{.Names}}' | grep -q 'front-cnt'; then
