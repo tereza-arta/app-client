@@ -12,10 +12,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-          #      - name: Build and tag of docker image
-          #        run: |
-          #          docker build --build-arg PASS={{secrets.CERT_PASS}} -t ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7} .
-
       - name: Build and tag of docker image
         run: |
           docker build -t ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7} .    
@@ -42,6 +38,5 @@ jobs:
             docker rm front-cnt || true
           fi  
           docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
-          docker exec front-cnt /bin/sh -c printf 'an3146073@gmail.com\nY\nY\n2\n' | sudo certbot --nginx
-          #docker exec front-cnt /bin/sh -c 'sudo certbot --nginx --non-interactive --agree-tos --email an3146073@gmail.com -d yourdomain.com'
+          #docker exec front-cnt /bin/sh -c printf 'an3146073@gmail.com\nY\nY\n2\n' | sudo certbot --nginx
           docker stop front-cnt-0
