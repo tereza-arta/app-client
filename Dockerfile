@@ -12,7 +12,7 @@ RUN apt update -y &&\
     apt install certbot -y &&\
     apt install python3-certbot-nginx -y
 
-RUN printf 'an3146073@gmail.com\nY\nY\n2\n' | sudo certbot --nginx
+RUN printf 'an3146073@gmail.com\nY\nY\n2\n' | certbot --nginx
 
 #RUN openssl req -x509 -newkey rsa:2048 -days 30 -nodes -passout pass:$PASS \
 #    -keyout /etc/nginx/certs/ssl.key -out /etc/nginx/certs/ssl.crt \
