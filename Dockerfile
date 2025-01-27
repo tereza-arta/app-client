@@ -8,10 +8,11 @@ RUN rm -rf /etc/nginx/conf.d/default.conf &&\
     rm -rf /usr/share/nginx/html/index.html
 #    mkdir /etc/nginx/certs
 
-RUN apt update -y &&\
-    apt install certbot -y &&\
-    apt install python3-certbot-nginx -y &&\
-    printf 'an3146073@gmail.com\nY\nY\n2\n' | sudo certbot --nginx
+RUN sudo apt update -y &&\
+    sudo apt install certbot -y &&\
+    sudo apt install python3-certbot-nginx -y
+
+RUN printf 'an3146073@gmail.com\nY\nY\n2\n' | sudo certbot --nginx
 
 #RUN openssl req -x509 -newkey rsa:2048 -days 30 -nodes -passout pass:$PASS \
 #    -keyout /etc/nginx/certs/ssl.key -out /etc/nginx/certs/ssl.crt \
