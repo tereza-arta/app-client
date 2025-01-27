@@ -21,7 +21,15 @@ jobs:
           docker build -t ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7} .    
 
       - name: Test newly created build image
-        run: docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
+        run: |
+          if ! docker ps -a --format '{{.Names}}' | grep -q 'front-cnt'; then
+            docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
+          else
+            echo "Container with name 'front-cnt' already exists!"
+            docker stop front-cnt || true
+            docker rm front-cnt || true
+            docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
+          fi
 
       - name: Push image to DockerHub
         if  : success()
