@@ -42,5 +42,7 @@ jobs:
             echo "Container with name 'front-cnt' already exists!"
             docker stop front-cnt
             docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
-          fi 
-          docker exec -it front-cnt /bin/sh -c 'printf "an3146073@gmail.com\nY\nY\n2\n" | certbot --nginx'
+          fi
+
+      - name: Generate certificate
+        run: docker exec -it front-cnt /bin/sh -c 'printf "an3146073@gmail.com\nY\nY\n2\n" | certbot --nginx'    
