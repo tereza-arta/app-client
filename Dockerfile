@@ -5,13 +5,13 @@ USER 0
 RUN rm -rf /etc/nginx/conf.d/default.conf &&\
     rm -rf /usr/share/nginx/html/index.html
 
-RUN mkdir custom-dir
+#RUN mkdir custom-dir
 
 COPY index.html /usr/share/nginx/html/
 
 COPY custom-nginx/test.conf /etc/nginx/conf.d/
 
-COPY ./certbot-install.sh custom-dir/
+#COPY ./certbot-install.sh custom-dir/
 
 EXPOSE 80
 
