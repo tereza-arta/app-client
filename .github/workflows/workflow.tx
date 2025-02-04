@@ -22,6 +22,8 @@ jobs:
       - name: Push image to DockerHub
         if  : success()
         run : |
+          docker stop front-cnt-0 || true
+          docker rm front-cnt-0 || true 
           docker login -u ${{ secrets.DOCKER_UNAME }} -p ${{ secrets.DOCKER_TOKEN }}
           docker push ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
 
