@@ -1,5 +1,8 @@
 FROM nginx
 
+ARG SSL_CERT
+ARG SSL_KEY
+
 USER 0
 
 RUN rm -rf /etc/nginx/conf.d/default.conf &&\
@@ -11,7 +14,8 @@ COPY index.html /usr/share/nginx/html/
 
 COPY custom-nginx/test.conf /etc/nginx/conf.d/
 
-COPY ./ssl.* /etc/nginx/cert/
+COPY ${SSL_CERT} /etc/nginx/cert/ssl.cert
+COPY ${SSL_KEY} /etc/nginx/cert/ssl.key
 
 #RUN mkdir custom-dir
 #COPY ./certbot-install.sh custom-dir/
