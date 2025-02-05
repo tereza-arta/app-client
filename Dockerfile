@@ -14,8 +14,8 @@ COPY index.html /usr/share/nginx/html/
 
 COPY custom-nginx/test.conf /etc/nginx/conf.d/
 
-COPY ${SSL_CERT} /etc/nginx/cert/ssl.cert
-COPY ${SSL_KEY} /etc/nginx/cert/ssl.key
+COPY  echo ${SSL_CERT} /etc/nginx/cert/ssl.cert
+COPY echo ${SSL_KEY} /etc/nginx/cert/ssl.key
 
 #RUN mkdir custom-dir
 #COPY ./certbot-install.sh custom-dir/
