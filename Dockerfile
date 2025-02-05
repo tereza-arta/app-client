@@ -8,8 +8,8 @@ USER 0
 RUN rm -rf /etc/nginx/conf.d/default.conf &&\
     rm -rf /usr/share/nginx/html/index.html &&\
     mkdir /etc/nginx/cert &&\
-    echo ${SSL_CERT} > ssl-cert &&\
-    echo ${SSL_KEY} > ssl-key   
+    echo "${SSL_CERT}" > ssl-cert &&\
+    echo "${SSL_KEY}" > ssl-key   
 
 COPY index.html /usr/share/nginx/html/
 
