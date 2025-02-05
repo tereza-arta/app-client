@@ -39,5 +39,5 @@ jobs:
             docker stop front-cnt || true
             docker rm front-cnt || true
           fi  
-          docker run --rm -d --name front-cnt -p 87:80 ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
+          docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
           
