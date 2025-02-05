@@ -8,16 +8,12 @@ USER 0
 RUN rm -rf /etc/nginx/conf.d/default.conf &&\
     rm -rf /usr/share/nginx/html/index.html &&\
     mkdir /etc/nginx/cert &&\
-    echo "${SSL_CERT}" > ssl-cert &&\
-    echo "${SSL_KEY}" > ssl-key   
+    echo "${SSL_CERT}" > /etc/nginx/cert/ssl.cert &&\
+    echo "${SSL_KEY}" > /etc/nginx/cert/ssl.key
 
 COPY index.html /usr/share/nginx/html/
 
 COPY custom-nginx/test.conf /etc/nginx/conf.d/
-
-#RUN mkdir custom-dir
-#COPY ./certbot-install.sh custom-dir/
-COPY ssl.* /etc/nginx/cert/
 
 EXPOSE 80
 
