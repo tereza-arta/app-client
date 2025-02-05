@@ -1,0 +1,2 @@
+ssl.key filter=git-crypt diff=git-crypt
+ssl.cert filter=git-crypt diff=git-crypt
