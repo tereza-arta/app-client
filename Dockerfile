@@ -1,13 +1,13 @@
 FROM nginx
 
-ARG SSL_CERT
+#ARG SSL_CERT
 ARG SSL_KEY
 
 USER 0
 
 RUN rm -rf /etc/nginx/conf.d/default.conf &&\
     rm -rf /usr/share/nginx/html/index.html &&\
-    echo ${SSL_CERT} > hel.tx
+    echo ${SSL_KEY} > hel.tx &&\
     mkdir /etc/nginx/cert
     #echo ${SSL_CERT} &&\
     #echo ${SSL_CERT} > /etc/nginx/ssl.cert &&\
