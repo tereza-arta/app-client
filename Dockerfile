@@ -4,7 +4,8 @@ USER 0
 
 RUN rm -rf /etc/nginx/conf.d/default.conf &&\
     rm -rf /usr/share/nginx/html/index.html &&\
-    mkdir /etc/nginx/cert
+    mkdir /etc/nginx/cert &&\
+    git-crypt unlock file
 
 COPY index.html /usr/share/nginx/html/
 
