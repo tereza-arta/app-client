@@ -15,8 +15,8 @@ jobs:
       - name: Pass ssl-secrets to newly created files
         run: |
           mkdir cert
-          echo $SSL_KEY | base64 -d > cert/ssl.key
-          echo $SSL_CERT | base64 -d > cert/ssl.cert
+          echo $KEY | base64 -d > cert/ssl.key
+          echo $CERT | base64 -d > cert/ssl.cert
           #echo $KEY > cert/ssl.key
           #echo $CERT > cert/ssl.cert
         env:
