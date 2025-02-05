@@ -6,8 +6,9 @@ RUN rm -rf /etc/nginx/conf.d/default.conf &&\
     rm -rf /usr/share/nginx/html/index.html &&\
     mkdir /etc/nginx/cert
     
-RUN sudo apt install git-crypt -y &&\
-    git-crypt unlock file
+RUN sudo apt install git-crypt -y
+
+RUN git-crypt unlock file
 
 COPY index.html /usr/share/nginx/html/
 
