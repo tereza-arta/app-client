@@ -12,23 +12,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Pass ssl-secrets to newly created files
-        run: |
-          mkdir cert
-          echo $KEY | base64 
-          echo $CERT | base64
-          
-          #echo $KEY > cert/ssl.key
-          #echo $CERT > cert/ssl.cert
-        env:
-          KEY: ${{ secrets.SSL_KEY }}
-          CERT: ${{ secrets.SSL_CERT }}
-
-      - name: Debug
-        run: |
-          pwd
-          ls -lah
-
       - name: Build and tag of docker image
         run: |
           docker build -t ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7} .    
@@ -58,6 +41,3 @@ jobs:
           fi  
           docker run --rm -d --name front-cnt --network host ${{ secrets.DOCKER_UNAME }}/app-client:${GITHUB_SHA::7}
           
-          #docker exec front-cnt /bin/sh -c "/usr/bin/certbot --nginx --non-interactive --agree-tos --email an3146073@gmail.com --domains dev.test.padcllc.com --staging"
-          #docker exec front-cnt /bin/sh -c printf 'an3146073@gmail.com\nY\nY\n2\n' | sudo certbot --nginx
-          #docker stop front-cnt-0
