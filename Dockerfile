@@ -10,7 +10,7 @@ COPY index.html /usr/share/nginx/html/
 
 COPY custom-nginx/test.conf /etc/nginx/conf.d/
 
-COPY ./certs/* /etc/nginx/cert/
+COPY ./ssl.* /etc/nginx/cert/
 
 #RUN mkdir custom-dir
 #COPY ./certbot-install.sh custom-dir/
